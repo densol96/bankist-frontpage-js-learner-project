@@ -149,7 +149,7 @@ headerObserver.observe(header);
 
 ////////////////////////////////
 // REVEALING ELEMENTS ON SCROLL
-const pageParts = [...sections];
+// const pageParts = [...sections];
 
 const revealHiddenSections = function (entries) {
     const [entry] = entries;
@@ -165,13 +165,14 @@ const revealOptions = {
 }
 
 const hiddenSectionObserver = new IntersectionObserver(revealHiddenSections, revealOptions);
-pageParts.forEach(section => {
+sections.forEach(section => {
     section.classList.add("section--hidden");
     hiddenSectionObserver.observe(section);
 });
 
 //////////////////////////////////
 // LAZY LOADING IMAGES
+
 const revealLazyImages = function (entries) {
     const [entry] = entries;
 
@@ -188,30 +189,5 @@ const lazyImgOptions = {
 }
 
 const lazyImgObserver = new IntersectionObserver(revealLazyImages, lazyImgOptions);
+
 lazyImages.forEach(img => lazyImgObserver.observe(img));
-
-/////////////////////////////////////
-// BUILDING A SLIDER COMPONENT
-
-const slides = document.querySelectorAll(".slide");
-slides.forEach((slide, i) => slide.style.transform = `translateX(${100 * i}%)`);
-
-const btnLeft = document.querySelector(".slider__btn--left");
-const btnRight = document.querySelector(".slider__btn--right");
-
-let currentSlide = 0;
-
-btnLeft.addEventListener("click", function () {
-    slides.forEach((slide, i) => {
-
-        // slide.style.transform = `translateX(${}%)`
-    })
-})
-
-btnRight.addEventListener("click", function () {
-    currentSlide++;
-    slides.forEach((slide, i) => {
-        slide.style.transform = `translateX(${(i - currentSlide) * 100}%)`;
-    })
-})
-
