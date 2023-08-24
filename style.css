@@ -136,6 +136,7 @@ img {
 }
 
 .nav__logo {
+  cursor: pointer;
   height: 4.5rem;
   transition: all 0.3s;
 }

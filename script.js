@@ -19,6 +19,7 @@ const navLinksBar = document.querySelector(".nav__links");
 const nav = document.querySelector(".nav");
 const firstOpenBtn = document.querySelector("a.btn--show-modal");
 
+const logo = document.querySelector("#logo");
 const header = document.querySelector(".header");
 
 const lazyImages = document.querySelectorAll(".lazy-img");
@@ -32,6 +33,13 @@ const leftBtn = document.querySelector(".slider__btn--left");
 const dotContainer = document.querySelector(".dots");
 ////////////////////////////////////////
 // MODAL
+
+// const scrollUp = function() {
+//     header.scrollIntoView({behviour: "smooth"});
+// }
+
+logo.addEventListener("click", () => header.scrollIntoView({ behviour: "smooth" }))
+
 const openModal = function (e) {
     e.preventDefault();
     modal.classList.remove('hidden');
