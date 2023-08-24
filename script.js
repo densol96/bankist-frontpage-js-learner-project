@@ -22,6 +22,14 @@ const firstOpenBtn = document.querySelector("a.btn--show-modal");
 const header = document.querySelector(".header");
 
 const lazyImages = document.querySelectorAll(".lazy-img");
+
+const tabContainer = document.querySelector(".operations__tab-container");
+
+const slider = document.querySelector(".slider");
+const slides = document.querySelectorAll(".slide");
+const rightBtn = document.querySelector(".slider__btn--right");
+const leftBtn = document.querySelector(".slider__btn--left");
+const dotContainer = document.querySelector(".dots");
 ////////////////////////////////////////
 // MODAL
 const openModal = function (e) {
@@ -78,8 +86,6 @@ navLinksBar.addEventListener("click", (e) => {
 
 ////////////////////////////////////////
 // BUILDING A TABBED COMPONENT
-const tabContainer = document.querySelector(".operations__tab-container");
-
 tabContainer.addEventListener("click", (e) => {
     const button = e.target.closest(".operations__tab");
 
@@ -113,7 +119,6 @@ const handleHover = function (e) {
 
 nav.addEventListener("mouseover", handleHover.bind(0.4))
 nav.addEventListener("mouseout", handleHover.bind(1))
-
 ////////////////////////////////////////
 // STICKY NAVIGATION
 // OPTION ONE - not the best in terms of perfomance, especially on movile devices
@@ -172,7 +177,6 @@ sections.forEach(section => {
 
 //////////////////////////////////
 // LAZY LOADING IMAGES
-
 const revealLazyImages = function (entries) {
     const [entry] = entries;
 
@@ -189,5 +193,71 @@ const lazyImgOptions = {
 }
 
 const lazyImgObserver = new IntersectionObserver(revealLazyImages, lazyImgOptions);
-
 lazyImages.forEach(img => lazyImgObserver.observe(img));
+//////////////////////////////////////
+// BUILDING A SLIDER COMPONENT
+slides.forEach((slide, i) => {
+    slide.style.transform = `translateX(${i * 100}%)`;
+})
+
+let currentSlide = 0;
+
+const goToSlide = function (argSlide) {
+    slides.forEach((slide, i) => {
+        slide.style.transform = `translateX(${(i - argSlide) * 100}%)`;
+    })
+}
+
+const goRight = function () {
+    if (currentSlide < slides.length - 1) {
+        currentSlide++;
+    } else {
+        currentSlide = 0;
+    }
+    goToSlide(currentSlide);
+    activeDot(currentSlide);
+}
+
+const goLeft = function () {
+    if (currentSlide > 0) {
+        currentSlide--;
+    } else {
+        currentSlide = slides.length - 1;
+    }
+    goToSlide(currentSlide);
+    activeDot(currentSlide);
+}
+
+rightBtn.addEventListener("click", goRight);
+leftBtn.addEventListener("click", goLeft);
+
+document.addEventListener("keydown", function (e) {
+    if (e.key === "ArrowLeft") {
+        goLeft();
+    } else if (e.key === "ArrowRight") {
+        goRight();
+    }
+})
+
+const createDots = function () {
+    slides.forEach((_, i) => {
+        dotContainer.insertAdjacentHTML("beforeend",
+            `<button class="dots__dot" data-slide="${i}"></button>`);
+    })
+}
+createDots();
+
+const activeDot = function (slide) {
+    dotContainer.querySelector(".dots__dot--active")?.classList.remove("dots__dot--active");
+    dotContainer.querySelector(`[data-slide="${slide}"]`).classList.add("dots__dot--active");
+}
+activeDot(currentSlide);
+
+dotContainer.addEventListener("click", function (e) {
+    if (e.target.classList.contains("dots__dot")) {
+        const slideNumDot = e.target.getAttribute("data-slide");
+        currentSlide = Number(slideNumDot);
+        goToSlide(currentSlide);
+        activeDot(currentSlide);
+    }
+})
